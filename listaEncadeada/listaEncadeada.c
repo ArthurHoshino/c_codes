@@ -403,7 +403,7 @@ int menu() {
             "13. Ordenar uma lista (Eu)\n"
             ">> ");
     scanf("%d", &opt);
-    system("cls");
+    system("clear");
     return opt;
 }
 
