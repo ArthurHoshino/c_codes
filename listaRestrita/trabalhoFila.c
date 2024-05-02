@@ -31,15 +31,6 @@ char textosOpt[10][50] = {
 /*
     <=== UTILITARIO ===>
 */
-const char * identificarSO() {
-    #ifdef _WIN32
-        return "cls";
-    #elif __unix__
-        return "clear";
-    #endif
-        return "cls";
-}
-
 void textoStatus(int opt) {
     printf("%s", textosOpt[opt]);
 }
@@ -89,10 +80,10 @@ void adicionarFim(FilaSenha **fila, char tipoSenha) {
         FilaSenha *novaSenha = (FilaSenha *) malloc (sizeof(FilaSenha));
 
         novaSenha->fim = NULL;
+        novaSenha->prox = NULL;
 
         if (isVazia(fila)) {
             novaSenha->senha = (tipoSenha == 'D') ? 4000 : (tipoSenha == 'I') ? 3000 : (tipoSenha == 'G') ? 2000 : 1000;
-            novaSenha->prox = NULL;
             *fila = novaSenha;
         } else {
             novaSenha->senha = (*fila)->fim->senha + 1;
@@ -176,7 +167,7 @@ void opcao(FilaSenha **filaArray[4], int opcao) {
     }
 }
 
-int menu(const char* tipoSO) {
+int menu() {
     int opt;
 
     printf("\n\nOpcao\n"
@@ -186,7 +177,7 @@ int menu(const char* tipoSO) {
             "3. Exibir\n"
             ">> ");
     scanf("%d", &opt);
-    system(tipoSO);
+    printf("\e[1;1H\e[2J");
     return opt;
 }
 
@@ -195,7 +186,6 @@ int main() {
     *filaDeficiente = (FilaSenha *) malloc (sizeof(FilaSenha)),
     *filaIdoso = (FilaSenha *) malloc (sizeof(FilaSenha)),
     *filaNormal = (FilaSenha *) malloc (sizeof(FilaSenha));
-    const char *tipoSO = identificarSO();
     int opt;
     
     iniciar(&filaDeficiente);
@@ -206,7 +196,7 @@ int main() {
     FilaSenha **filaArray[4] = {&filaDeficiente, &filaIdoso, &filaGestante, &filaNormal};
 
     do {
-        opt = menu(tipoSO);
+        opt = menu();
         opcao(filaArray, opt);
     } while (opt);
 }
